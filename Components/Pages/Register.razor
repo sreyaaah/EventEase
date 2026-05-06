@@ -1,0 +1,79 @@
+@page "/register"
+@rendermode InteractiveServer
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+@using EventEase.Services
+
+@inject UserSessionService Session
+
+<h3>Event Registration</h3>
+
+<EditForm Model="user"
+          OnValidSubmit="HandleSubmit"
+          FormName="registerForm">
+
+    <DataAnnotationsValidator />
+
+    <ValidationSummary />
+
+    <InputText @bind-Value="user.Name"
+               placeholder="Name"
+               class="form-control mt-2" />
+
+    <ValidationMessage For="@(() => user.Name)" />
+
+    <InputText @bind-Value="user.Email"
+               placeholder="Email"
+               class="form-control mt-2" />
+
+    <ValidationMessage For="@(() => user.Email)" />
+
+    <button type="submit"
+            class="btn btn-primary mt-3">
+
+        Register
+
+    </button>
+
+</EditForm>
+
+@if (!string.IsNullOrWhiteSpace(message))
+{
+    <p class="text-success mt-3">
+        @message
+    </p>
+}
+
+@if (Session.IsLoggedIn)
+{
+    <p class="text-primary mt-2">
+        Current User: @Session.UserName
+    </p>
+}
+
+@code {
+
+    User user = new();
+
+    string? message;
+
+    void HandleSubmit()
+    {
+        Session.UserName = user.Name;
+
+        Session.IsLoggedIn = true;
+
+        message = $"Welcome {user.Name}! Registration Successful!";
+    }
+
+    public class User
+    {
+        [Required(ErrorMessage = "Name is required")]
+        public string Name { get; set; } = "";
+
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email format")]
+        public string Email { get; set; } = "";
+    }
+
+}

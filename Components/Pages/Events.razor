@@ -1,0 +1,44 @@
+@page "/events"
+
+@using EventEase.Models
+
+<h3>Event List</h3>
+
+@foreach (var ev in events.Take(10))
+{
+    <EventCard Event="ev" />
+}
+
+@code {
+
+    List<Event> events = new()
+    {
+        new Event
+        {
+            Id = 1,
+            Name = "Tech Fest",
+            Location = "Kochi",
+            Date = DateTime.Now,
+            Description = "Coding competition event"
+        },
+
+        new Event
+        {
+            Id = 2,
+            Name = "AI Workshop",
+            Location = "Bangalore",
+            Date = DateTime.Now.AddDays(2),
+            Description = "Artificial Intelligence workshop"
+        },
+
+        new Event
+        {
+            Id = 3,
+            Name = "Startup Meetup",
+            Location = "Chennai",
+            Date = DateTime.Now.AddDays(5),
+            Description = "Entrepreneur networking"
+        }
+    };
+
+}

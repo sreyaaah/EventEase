@@ -1,0 +1,52 @@
+@page "/attendance"
+@rendermode InteractiveServer
+<h3>Attendance Tracker</h3>
+
+<input @bind="name"
+       placeholder="Enter name"
+       class="form-control" />
+
+<button class="btn btn-success mt-2"
+        @onclick="AddAttendance">
+
+    Mark Attendance
+
+</button>
+
+@if (!string.IsNullOrWhiteSpace(message))
+{
+    <p class="text-success mt-3">
+        @message
+    </p>
+}
+
+<ul class="mt-3">
+
+    @foreach (var person in attendees)
+    {
+        <li>@person</li>
+    }
+
+</ul>
+
+@code {
+
+    string? name;
+
+    string? message;
+
+    List<string> attendees = new();
+
+    void AddAttendance()
+    {
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            attendees.Add(name);
+
+            message = $"{name} marked present successfully!";
+
+            name = "";
+        }
+    }
+
+}

@@ -1,0 +1,32 @@
+@using EventEase.Models
+
+<div class="card m-3 p-3 border rounded shadow-sm">
+
+    <h3>
+        @(string.IsNullOrWhiteSpace(Event?.Name)
+            ? "No Event Name"
+            : Event.Name)
+    </h3>
+
+    <p>
+        <b>Location:</b>
+        @(string.IsNullOrWhiteSpace(Event?.Location)
+            ? "Unknown"
+            : Event.Location)
+    </p>
+
+    <p>
+        <b>Date:</b>
+        @Event.Date.ToShortDateString()
+    </p>
+
+    <p>@Event.Description</p>
+
+</div>
+
+@code {
+
+    [Parameter]
+    public Event Event { get; set; }
+
+}
