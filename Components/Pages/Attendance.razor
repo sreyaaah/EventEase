@@ -1,52 +1,103 @@
 @page "/attendance"
 @rendermode InteractiveServer
-<h3>Attendance Tracker</h3>
 
-<input @bind="name"
-       placeholder="Enter name"
-       class="form-control" />
+<PageTitle>Attendance - EventEase</PageTitle>
 
-<button class="btn btn-success mt-2"
-        @onclick="AddAttendance">
+<div class="container py-5 animate-fade-in">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="glass-card p-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold mb-0">Attendance <span class="gradient-text">Tracker</span></h2>
+                        <p class="text-muted mb-0">Monitor event participation in real-time</p>
+                    </div>
+                    <div class="badge bg-primary rounded-pill px-3 py-2">
+                        Total: @attendees.Count
+                    </div>
+                </div>
 
-    Mark Attendance
+                <div class="input-group mb-4">
+                    <input @bind="newName"
+                           @bind:event="oninput"
+                           @onkeyup="HandleKeyUp"
+                           placeholder="Enter attendee name..."
+                           class="form-control form-control-lg border-end-0" />
+                    <button class="btn btn-primary px-4"
+                            @onclick="AddAttendance"
+                            disabled="@string.IsNullOrWhiteSpace(newName)">
+                        Mark Present
+                    </button>
+                </div>
 
-</button>
+                @if (!string.IsNullOrWhiteSpace(message))
+                {
+                    <div class="alert alert-info border-0 shadow-sm mb-4 animate-fade-in">
+                        <i class="bi bi-info-circle me-2"></i> @message
+                    </div>
+                }
 
-@if (!string.IsNullOrWhiteSpace(message))
-{
-    <p class="text-success mt-3">
-        @message
-    </p>
-}
-
-<ul class="mt-3">
-
-    @foreach (var person in attendees)
-    {
-        <li>@person</li>
-    }
-
-</ul>
+                <div class="list-group list-group-flush border rounded-3 overflow-hidden">
+                    @if (attendees.Count == 0)
+                    {
+                        <div class="list-group-item text-center py-4 text-muted">
+                            No attendees marked yet.
+                        </div>
+                    }
+                    else
+                    {
+                        @foreach (var (person, index) in attendees.Select((p, i) => (p, i)).Reverse())
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center animate-fade-in">
+                                <div>
+                                    <span class="fw-medium">@person</span>
+                                    <small class="text-muted d-block" style="font-size: 0.75rem;">Checked in just now</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-danger border-0" @onclick="() => RemoveAttendee(person)">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
+    private string? newName;
+    private string? message;
+    private List<string> attendees = new();
 
-    string? name;
-
-    string? message;
-
-    List<string> attendees = new();
-
-    void AddAttendance()
+    private void AddAttendance()
     {
-        if (!string.IsNullOrWhiteSpace(name))
+        if (!string.IsNullOrWhiteSpace(newName))
         {
-            attendees.Add(name);
-
-            message = $"{name} marked present successfully!";
-
-            name = "";
+            if (attendees.Contains(newName, StringComparer.OrdinalIgnoreCase))
+            {
+                message = $"{newName} is already marked as present.";
+            }
+            else
+            {
+                attendees.Add(newName);
+                message = $"{newName} successfully added to the attendance list.";
+                newName = "";
+            }
         }
     }
 
+    private void HandleKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            AddAttendance();
+        }
+    }
+
+    private void RemoveAttendee(string person)
+    {
+        attendees.Remove(person);
+        message = $"Removed {person} from the list.";
+    }
 }

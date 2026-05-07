@@ -1,32 +1,46 @@
 @using EventEase.Models
 
-<div class="card m-3 p-3 border rounded shadow-sm">
+@if (Event != null)
+{
+    <div class="glass-card m-3 p-4 animate-fade-in">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+                <h3 class="gradient-text mb-1">
+                    @(string.IsNullOrWhiteSpace(Event.Name) ? "New Event" : Event.Name)
+                </h3>
+                <span class="badge rounded-pill bg-light text-dark border">
+                    @Event.Date.ToString("MMM dd, yyyy")
+                </span>
+            </div>
+            <div class="text-end">
+                <small class="text-muted d-block">Location</small>
+                <span class="fw-semibold">@Event.Location</span>
+            </div>
+        </div>
 
-    <h3>
-        @(string.IsNullOrWhiteSpace(Event?.Name)
-            ? "No Event Name"
-            : Event.Name)
-    </h3>
+        <div class="mb-3">
+            <label class="form-label text-muted small fw-bold text-uppercase">Event Description (2-Way Binding)</label>
+            <textarea @bind="Event.Description" 
+                      @bind:event="oninput"
+                      class="form-control bg-light border-0" 
+                      placeholder="Describe your event..."
+                      rows="2"></textarea>
+        </div>
 
-    <p>
-        <b>Location:</b>
-        @(string.IsNullOrWhiteSpace(Event?.Location)
-            ? "Unknown"
-            : Event.Location)
-    </p>
-
-    <p>
-        <b>Date:</b>
-        @Event.Date.ToShortDateString()
-    </p>
-
-    <p>@Event.Description</p>
-
-</div>
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <a href="/event/@Event.Id" class="btn btn-primary btn-sm">View Details</a>
+            <span class="text-muted small">ID: #@Event.Id</span>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-light border shadow-sm m-3">
+        Loading event details...
+    </div>
+}
 
 @code {
-
     [Parameter]
-    public Event Event { get; set; }
-
+    public Event Event { get; set; } = new();
 }

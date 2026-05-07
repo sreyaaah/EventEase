@@ -1,14 +1,89 @@
-@page "/eventdetails/{id:int}"
+@page "/event/{id:int}"
+@using EventEase.Models
 
-<h3>Event Details</h3>
+<PageTitle>Event Details - EventEase</PageTitle>
 
-<p>
-    Viewing details for Event ID: @Id
-</p>
+<div class="container py-5 animate-fade-in">
+    @if (currentEvent == null)
+    {
+        <div class="alert alert-warning">Event not found.</div>
+    }
+    else
+    {
+        <div class="glass-card overflow-hidden">
+            <div class="bg-primary p-5 text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="display-4 fw-bold mb-2">@currentEvent.Name</h1>
+                        <p class="lead mb-0"><i class="bi bi-geo-alt-fill me-2"></i>@currentEvent.Location</p>
+                    </div>
+                    <div class="text-end">
+                        <div class="h3 mb-0">@currentEvent.Date.ToString("dd")</div>
+                        <div class="text-uppercase small">@currentEvent.Date.ToString("MMMM yyyy")</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-5">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4 class="fw-bold mb-3">About this Event</h4>
+                        <p class="text-muted" style="font-size: 1.1rem; line-height: 1.8;">
+                            @currentEvent.Description
+                        </p>
+                        
+                        <div class="mt-5 p-4 bg-light rounded-3">
+                            <h5 class="fw-bold mb-3">Event Agenda</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> 09:00 AM - Registration and Welcome Drinks</li>
+                                <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> 10:30 AM - Keynote Presentation</li>
+                                <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> 01:00 PM - Networking Lunch</li>
+                                <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> 03:00 PM - Breakout Sessions</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm p-4 sticky-top" style="top: 2rem;">
+                            <h5 class="fw-bold mb-4">Registration</h5>
+                            <div class="d-grid gap-3">
+                                <a href="/register" class="btn btn-primary py-3">Reserve a Spot</a>
+                                <a href="/attendance" class="btn btn-outline-secondary py-3">Check-in Now</a>
+                            </div>
+                            <hr class="my-4">
+                            <div class="small text-muted">
+                                <div class="mb-2"><i class="bi bi-clock me-2"></i> Starts at 9:00 AM</div>
+                                <div class="mb-2"><i class="bi bi-ticket-perforated me-2"></i> 50 spots remaining</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <a href="/events" class="text-primary text-decoration-none fw-semibold">
+                <i class="bi bi-arrow-left me-1"></i> Back to Event List
+            </a>
+        </div>
+    }
+</div>
 
 @code {
-
     [Parameter]
     public int Id { get; set; }
 
+    private Event? currentEvent;
+
+    protected override void OnInitialized()
+    {
+        // Mock lookup
+        currentEvent = new Event
+        {
+            Id = Id,
+            Name = "Sample Mega Event",
+            Location = "Innovation Center, Downtown",
+            Date = DateTime.Now.AddDays(Id),
+            Description = "This is a detailed description of the event. We will cover various topics related to industry trends and provide hands-on experience with the latest technologies. Join us for a day of learning and networking!"
+        };
+    }
 }

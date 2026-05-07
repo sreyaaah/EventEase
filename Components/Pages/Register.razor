@@ -5,75 +5,90 @@
 @using EventEase.Services
 
 @inject UserSessionService Session
+@inject NavigationManager Nav
 
-<h3>Event Registration</h3>
+<PageTitle>Register - EventEase</PageTitle>
 
-<EditForm Model="user"
-          OnValidSubmit="HandleSubmit"
-          FormName="registerForm">
+<div class="container py-5 animate-fade-in">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="glass-card p-5">
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold">Join <span class="gradient-text">EventEase</span></h2>
+                    <p class="text-muted">Create your account to start managing events</p>
+                </div>
 
-    <DataAnnotationsValidator />
+                <EditForm Model="user" OnValidSubmit="HandleSubmit" FormName="registerForm">
+                    <DataAnnotationsValidator />
 
-    <ValidationSummary />
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Full Name</label>
+                        <InputText @bind-Value="user.Name" class="form-control" placeholder="John Doe" />
+                        <ValidationMessage For="@(() => user.Name)" class="text-danger small" />
+                    </div>
 
-    <InputText @bind-Value="user.Name"
-               placeholder="Name"
-               class="form-control mt-2" />
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email Address</label>
+                        <InputText @bind-Value="user.Email" class="form-control" placeholder="john@example.com" />
+                        <ValidationMessage For="@(() => user.Email)" class="text-danger small" />
+                    </div>
 
-    <ValidationMessage For="@(() => user.Name)" />
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Password</label>
+                        <InputText @bind-Value="user.Password" type="password" class="form-control" placeholder="••••••••" />
+                        <ValidationMessage For="@(() => user.Password)" class="text-danger small" />
+                    </div>
 
-    <InputText @bind-Value="user.Email"
-               placeholder="Email"
-               class="form-control mt-2" />
+                    <button type="submit" class="btn btn-primary w-100 py-2 mb-3">
+                        Create Account
+                    </button>
+                    
+                    @if (!string.IsNullOrWhiteSpace(message))
+                    {
+                        <div class="alert alert-success border-0 shadow-sm animate-fade-in">
+                            @message
+                        </div>
+                    }
+                </EditForm>
 
-    <ValidationMessage For="@(() => user.Email)" />
-
-    <button type="submit"
-            class="btn btn-primary mt-3">
-
-        Register
-
-    </button>
-
-</EditForm>
-
-@if (!string.IsNullOrWhiteSpace(message))
-{
-    <p class="text-success mt-3">
-        @message
-    </p>
-}
-
-@if (Session.IsLoggedIn)
-{
-    <p class="text-primary mt-2">
-        Current User: @Session.UserName
-    </p>
-}
+                @if (Session.IsLoggedIn)
+                {
+                    <div class="text-center mt-4 pt-4 border-top">
+                        <p class="text-muted small mb-1">Signed in as</p>
+                        <span class="fw-bold text-primary">@Session.UserName</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
+    private UserRegistrationModel user = new();
+    private string? message;
 
-    User user = new();
-
-    string? message;
-
-    void HandleSubmit()
+    private void HandleSubmit()
     {
         Session.UserName = user.Name;
-
         Session.IsLoggedIn = true;
-
-        message = $"Welcome {user.Name}! Registration Successful!";
+        message = $"Welcome, {user.Name}! Your session is now active.";
+        
+        // Simulate a small delay for feedback then maybe redirect
+        // Nav.NavigateTo("/events");
     }
 
-    public class User
+    public class UserRegistrationModel
     {
-        [Required(ErrorMessage = "Name is required")]
+        [Required(ErrorMessage = "Please enter your name")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Name must be between 3 and 50 characters")]
         public string Name { get; set; } = "";
 
         [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Invalid email format")]
+        [EmailAddress(ErrorMessage = "Please enter a valid email address")]
         public string Email { get; set; } = "";
-    }
 
+        [Required(ErrorMessage = "Password is required")]
+        [MinLength(6, ErrorMessage = "Password must be at least 6 characters")]
+        public string Password { get; set; } = "";
+    }
 }
