@@ -133,3 +133,41 @@ body {
     background: var(--primary);
     color: white !important;
 }
+
+/* Global Visibility Fixes */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-main);
+}
+
+p, span, label {
+    color: var(--text-muted);
+}
+
+.container, .container-fluid {
+    color: var(--text-main);
+}
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--glass-border);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
