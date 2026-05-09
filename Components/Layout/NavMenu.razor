@@ -1,7 +1,7 @@
-<div class="top-row ps-3 navbar navbar-dark">
+<div class="top-row ps-3 navbar navbar-dark border-bottom border-secondary" style="background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px);">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="">
-            <span class="text-primary"><i class="bi bi-stars me-2"></i></span>EventEase
+        <a class="navbar-brand fw-bold fs-4" href="">
+            <span class="gradient-text"><i class="bi bi-rocket-takeoff me-2"></i>EventEase</span>
         </a>
     </div>
 </div>
@@ -10,29 +10,43 @@
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').checked = false">
     <nav class="flex-column p-3">
-        <div class="nav-item mb-2">
-            <NavLink class="nav-link px-3" href="" Match="NavLinkMatch.All">
-                <i class="bi bi-house-door me-2"></i> Home
+        <div class="nav-item">
+            <NavLink class="nav-link nav-pill px-3 d-flex align-items-center" href="" Match="NavLinkMatch.All">
+                <i class="bi bi-grid-fill me-3"></i> Dashboard
             </NavLink>
         </div>
 
-        <div class="nav-item mb-2">
-            <NavLink class="nav-link px-3" href="events">
-                <i class="bi bi-calendar-event me-2"></i> Events
+        <div class="nav-item">
+            <NavLink class="nav-link nav-pill px-3 d-flex align-items-center" href="events">
+                <i class="bi bi-calendar-week-fill me-3"></i> Events
             </NavLink>
         </div>
 
-        <div class="nav-item mb-2">
-            <NavLink class="nav-link px-3" href="register">
-                <i class="bi bi-person-plus me-2"></i> Register
+        <div class="nav-item">
+            <NavLink class="nav-link nav-pill px-3 d-flex align-items-center" href="register">
+                <i class="bi bi-person-plus-fill me-3"></i> Register
             </NavLink>
         </div>
 
-        <div class="nav-item mb-2">
-            <NavLink class="nav-link px-3" href="attendance">
-                <i class="bi bi-check-circle me-2"></i> Attendance
+        <div class="nav-item">
+            <NavLink class="nav-link nav-pill px-3 d-flex align-items-center" href="attendance">
+                <i class="bi bi-check-circle-fill me-3"></i> Attendance
             </NavLink>
         </div>
-        
+
+        <div class="border-top border-secondary my-4 opacity-25"></div>
+
+        <div class="nav-item">
+            <NavLink class="nav-link nav-pill px-3 d-flex align-items-center" href="portfolio">
+                <i class="bi bi-person-vcard-fill me-3"></i> My Portfolio
+            </NavLink>
+        </div>
     </nav>
 </div>
+
+<style>
+    .nav-scrollable {
+        background: rgba(15, 23, 42, 0.5);
+        height: calc(100vh - 3.5rem);
+    }
+</style>
